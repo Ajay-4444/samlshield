@@ -1,0 +1,11 @@
+{
+  "name": "CDATA Injection Vulnerability",
+  "description": "Should detect and block SAML responses with CDATA sections (text-node splitting, CVE-2017-11428 family)",
+  "input": {
+    "response_xml": "!embed:base64:file://cdata_injection.xml"
+  },
+  "mockTime": "2022-11-22T20:25:00Z",
+  "shouldSucceed": false,
+  "expectedError": "response contained illegal CDATA sections",
+  "expectedErrorCode": "xml_validation_error"
+}

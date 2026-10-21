@@ -113,6 +113,17 @@ function blockForbiddenNodes(node: Node): void {
           },
         );
 
+      case currentNode.CDATA_SECTION_NODE:
+        // CDATA sections split a text value across sibling nodes exactly as a
+        // comment does (CVE-2017-11428 family), so they are rejected outright.
+        throw new XMLValidationError(
+          "response contained illegal CDATA sections",
+          {
+            cdata: currentNode.nodeValue,
+            location: currentNode.parentNode?.nodeName || "unknown",
+          },
+        );
+
       case currentNode.PROCESSING_INSTRUCTION_NODE:
         // Allow processing instructions only at document level (like XML declaration)
         if (
@@ -143,7 +154,6 @@ function blockForbiddenNodes(node: Node): void {
       case currentNode.ELEMENT_NODE:
       case currentNode.ATTRIBUTE_NODE:
       case currentNode.TEXT_NODE:
-      case currentNode.CDATA_SECTION_NODE:
       case currentNode.DOCUMENT_NODE:
       case currentNode.DOCUMENT_FRAGMENT_NODE:
         break;
